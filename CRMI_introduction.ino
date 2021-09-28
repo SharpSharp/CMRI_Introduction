@@ -11,7 +11,7 @@
  *
  * CMRI turnout control. One Bit, Pulsed Output.
  *
- * Track detection feedback sensor outputs added
+ * Turnout feedback sensor outputs added
  */
 
 #include <CMRI.h>
@@ -132,6 +132,7 @@ void loop() {
         digitalWrite(turnout1FrogPin, HIGH);
         digitalWrite(turnout2FrogPin, LOW);
         turnoutIsClosed = false;
+		cmri.set_bit(6, HIGH);
       }
     }
   }
@@ -142,6 +143,7 @@ void loop() {
        digitalWrite(turnout1FrogPin, LOW);
        digitalWrite(turnout2FrogPin, HIGH);
        turnoutIsClosed = true;
+	   cmri.set_bit(6, LOW);
       }
     }
   }
