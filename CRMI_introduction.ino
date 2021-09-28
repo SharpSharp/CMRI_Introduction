@@ -11,7 +11,7 @@
  *
  * CMRI turnout control. One Bit, Pulsed Output.
  *
- * Turnout feedback sensor outputs added
+ * Changed to two sensor feedback
  */
 
 #include <CMRI.h>
@@ -107,9 +107,11 @@ void loop() {
   if (digitalRead(pushButtonRearPin) == LOW || digitalRead(pushButtonFrontPin) == LOW){
     if (!turnoutIsClosed){
   	  turnout1Target = turnout1ClosedPosition;
+	  cmri.set_bit(6, LOW);
 	  }
     if (turnoutIsClosed){
   	  turnout1Target = turnout1ThrownPosition;
+	  cmri.set_bit(7, LOW);
 	  }
   }
 /*--------------------------------------------------------------------*/     
@@ -118,9 +120,11 @@ void loop() {
   if (cmri.get_bit(0)){
       if (!turnoutIsClosed){
     	  turnout1Target = turnout1ClosedPosition;
+		  cmri.set_bit(6, LOW);
   	  }
       if (turnoutIsClosed){
     	  turnout1Target = turnout1ThrownPosition;
+		  cmri.set_bit(7, LOW);
   	  }
   }  
 /*--------------------------------------------------------------------*/
@@ -143,7 +147,7 @@ void loop() {
        digitalWrite(turnout1FrogPin, LOW);
        digitalWrite(turnout2FrogPin, HIGH);
        turnoutIsClosed = true;
-	   cmri.set_bit(6, LOW);
+	   cmri.set_bit(7, HIGH);
       }
     }
   }
