@@ -8,6 +8,8 @@
  * 
  * CMRI library and setup added
  * https://github.com/madleech/ArduinoCMRI
+ *
+ * CMRI turnout control added. One Bit, Pulsed Output.
  */
 
 #include <CMRI.h>
@@ -98,7 +100,17 @@ void loop() {
   	  turnout1Target = turnout1ThrownPosition;
 	  }
   }
-  
+/*--------------------------------------------------------------------*/     
+  // update outputs from CMRI
+  // check to see if CMRI is sending a turnout bit
+  if (cmri.get_bit(0)){
+      if (!turnoutIsClosed){
+    	  turnout1Target = turnout1ClosedPosition;
+  	  }
+      if (turnoutIsClosed){
+    	  turnout1Target = turnout1ThrownPosition;
+  	  }
+  }  
 /*--------------------------------------------------------------------*/
   // Check postion of turnout1 and set frogs and turnout2 accordingly
   if (turnoutIsClosed){
