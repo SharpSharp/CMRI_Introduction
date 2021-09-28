@@ -6,10 +6,12 @@
  * 
  * CMRI inputs and outputs in the 0000 range
  * 
- * CMRI library and setup added
+ * CMRI library
  * https://github.com/madleech/ArduinoCMRI
  *
- * CMRI turnout control added. One Bit, Pulsed Output.
+ * CMRI turnout control. One Bit, Pulsed Output.
+ *
+ * Track detection feedback sensor outputs added
  */
 
 #include <CMRI.h>
@@ -90,6 +92,16 @@ void setup() {
 void loop() {
   // build up a packet
   cmri.process();
+/*--------------------------------------------------------------------*/ 
+  // update inputs (invert digitalRead due to the pullups)
+  
+  cmri.set_bit(0, !digitalRead(block1Pin));
+  cmri.set_bit(1, !digitalRead(block2Pin));
+  cmri.set_bit(2, !digitalRead(block3Pin));
+  cmri.set_bit(3, !digitalRead(block4Pin));
+  cmri.set_bit(4, !digitalRead(block5Pin));
+  cmri.set_bit(5, !digitalRead(block6Pin));
+  
 /*--------------------------------------------------------------------*/ 
   // check for "local" switches for either push botton switch
   if (digitalRead(pushButtonRearPin) == LOW || digitalRead(pushButtonFrontPin) == LOW){
