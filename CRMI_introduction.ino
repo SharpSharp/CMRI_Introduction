@@ -6,14 +6,14 @@
  * 
  * CMRI inputs and outputs in the 0000 range
  * 
- * 
- * No CMRI connect at this stage
+ * CMRI library and setup added
+ * https://github.com/madleech/ArduinoCMRI
  */
 
-
+#include <CMRI.h>
 #include <Servo.h>
 
-
+CMRI cmri; // defaults to a SMINI with address 0. SMINI = 24 inputs, 48 outputs
 
 /*--------------------------------------------------------------------*/
 
@@ -60,6 +60,7 @@ byte turnout2Target   = turnout2ClosedPosition;
 /*--------------------------------------------------------------------*/
 
 void setup() {
+  Serial.begin(9600, SERIAL_8N2); // start talking at 9600bps
  
   // push buttons
   pinMode(pushButtonRearPin, INPUT_PULLUP);
@@ -85,7 +86,9 @@ void setup() {
 /*--------------------------------------------------------------------*/
 
 void loop() {
-
+  // build up a packet
+  cmri.process();
+/*--------------------------------------------------------------------*/ 
   // check for "local" switches for either push botton switch
   if (digitalRead(pushButtonRearPin) == LOW || digitalRead(pushButtonFrontPin) == LOW){
     if (!turnoutIsClosed){
