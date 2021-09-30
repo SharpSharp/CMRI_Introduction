@@ -2,22 +2,26 @@
  * CMRI module for detection and turnouts
  * ======================================
  * 
- * Set up for direct connection with USB lead from JMRI to Arduino
+ * Set up for connection with RS485 link from JMRI to Arduino
  * 
  * CMRI inputs and outputs in the 0000 range
  * 
- * CMRI library
+ * CMRI & RS485 libraries
  * https://github.com/madleech/ArduinoCMRI
+ * https://github.com/madleech/Auto485
  *
- * CMRI turnout control changed to. Two Bit, Pulsed Output.
+ * CMRI turnout control: Two Bit, Pulsed Output.
  *
  * Two sensor feedback
  */
 
+#include <Auto485.h>
 #include <CMRI.h>
 #include <Servo.h>
 
-CMRI cmri; // defaults to a SMINI with address 0. SMINI = 24 inputs, 48 outputs
+Auto485 bus(2);       // Pin 2 in for MAX485 (2–DE). Used along with Pins 0–RX and 1–TX
+
+CMRI cmri (0, 24, 48, bus); // 0 is node address specific to this Arduino on the system
 
 /*--------------------------------------------------------------------*/
 
@@ -64,7 +68,7 @@ byte turnout2Target   = turnout2ClosedPosition;
 /*--------------------------------------------------------------------*/
 
 void setup() {
-  Serial.begin(9600, SERIAL_8N2); // start talking at 9600bps
+  bus.begin(9600, SERIAL_8N2); // start talking at 9600bps
  
   // push buttons
   pinMode(pushButtonRearPin, INPUT_PULLUP);
