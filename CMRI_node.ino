@@ -44,9 +44,10 @@ struct ServoTurnout
     targetPosition = closedPosition;       // setup targets as closed positiion
     currentPosition = closedPosition;      // setup position to closed
     isClosed = true;                       // setup closed is true
+    cmri.set_bit(cmriBit,   LOW);
     cmri.set_bit(cmriBit+1, HIGH);
 
-    servo.attach(servoPin);                     // attach all the turnout servos
+    servo.attach(servoPin);                // attach all the turnout servos
     servo.write(currentPosition);          // write the servos poistions
 
     delay(200);
