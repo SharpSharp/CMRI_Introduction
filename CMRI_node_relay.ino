@@ -36,6 +36,7 @@ struct ServoTurnout
   Servo servo;
   int targetPosition;
   int currentPosition;
+  int switchRelay;
   unsigned long moveDelay;
   bool isClosed;
 
@@ -44,6 +45,7 @@ struct ServoTurnout
     targetPosition = closedPosition;       // setup targets as closed positiion
     currentPosition = closedPosition;      // setup position to closed
     isClosed = true;                       // setup closed is true
+    switchRelay = (closedPosition + thrownPosition)/2;  // setup mid point
     cmri.set_bit(cmriBit,   LOW);
     cmri.set_bit(cmriBit+1, HIGH);
 
@@ -93,7 +95,12 @@ void ServoTurnout::moveServo()
       moveDelay = millis() + TURNOUT_MOVE_SPEED;
       if (currentPosition < targetPosition) currentPosition++;
       if (currentPosition > targetPosition) currentPosition--;
-      servo.write(currentPosition);    
+      servo.write(currentPosition);
+      if ((currentPosition == switchRelay) && (relayPin > 0))
+      {
+        if (isClosed) digitalWrite(relayPin, LOW);
+        else          digitalWrite(relayPin, HIGH);
+      }    
       if (currentPosition == closedPosition) 
       {          
         isClosed = true;
